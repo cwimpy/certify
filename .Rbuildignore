@@ -1,5 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^README\.Rmd$
+^README\.html$
 ^\.github$
 ^\.DS_Store$
+^cran-comments\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

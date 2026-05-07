@@ -48,20 +48,20 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' out <- tempfile("certify_", fileext = ".pdf")
 #' make_certificate(
-#'   path         = "jane_doe.pdf",
-#'   recipient    = "Jane A. Doe",
-#'   title        = "Certificate of Achievement",
-#'   award_name   = "Outstanding Student",
-#'   organization = "University of Somewhere",
-#'   citation     = "in recognition of exceptional dedication and scholarship.",
+#'   path          = out,
+#'   recipient     = "Jane A. Doe",
+#'   title         = "Certificate of Achievement",
+#'   award_name    = "Outstanding Student",
+#'   organization  = "University of Somewhere",
+#'   citation      = "in recognition of exceptional dedication and scholarship.",
 #'   academic_year = "2025-2026",
-#'   signers      = list(
+#'   signers       = list(
 #'     list(name = "Alex Chair, Ph.D.", title = "Department Chair")
 #'   )
 #' )
-#' }
+#' file.exists(out)
 make_certificate <- function(path,
                              recipient,
                              title          = "Certificate of Achievement",
@@ -91,6 +91,17 @@ make_certificate <- function(path,
   }
   if (length(signers) < 1L || length(signers) > 2L) {
     stop("`signers` must be a list of 1 or 2 signers.", call. = FALSE)
+  }
+  if (!isTRUE(capabilities("cairo"))) {
+    stop(
+      "make_certificate() needs an R build with Cairo support to render ",
+      "Unicode glyphs (en-dashes, smart quotes, etc.) via cairo_pdf(). ",
+      "Your R reports capabilities('cairo') == FALSE. On Linux this ",
+      "usually means installing the Cairo system libraries and ",
+      "reinstalling R; on macOS and Windows the standard CRAN binaries ",
+      "include Cairo by default.",
+      call. = FALSE
+    )
   }
 
   PAGE_W <- width

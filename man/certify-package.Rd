@@ -25,11 +25,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Cameron Wimpy \email{cwimpy@mac.com}
+\strong{Maintainer}: Cameron Wimpy \email{cwimpy@mac.com} [copyright holder]
 
 Authors:
 \itemize{
-  \item Cameron Wimpy \email{cwimpy@mac.com}
+  \item Cameron Wimpy \email{cwimpy@mac.com} [copyright holder]
 }
 
 }

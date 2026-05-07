@@ -89,18 +89,18 @@ and the signature block(s).
 }
 
 \examples{
-\dontrun{
+out <- tempfile("certify_", fileext = ".pdf")
 make_certificate(
-  path         = "jane_doe.pdf",
-  recipient    = "Jane A. Doe",
-  title        = "Certificate of Achievement",
-  award_name   = "Outstanding Student",
-  organization = "University of Somewhere",
-  citation     = "in recognition of exceptional dedication and scholarship.",
+  path          = out,
+  recipient     = "Jane A. Doe",
+  title         = "Certificate of Achievement",
+  award_name    = "Outstanding Student",
+  organization  = "University of Somewhere",
+  citation      = "in recognition of exceptional dedication and scholarship.",
   academic_year = "2025-2026",
-  signers      = list(
+  signers       = list(
     list(name = "Alex Chair, Ph.D.", title = "Department Chair")
   )
 )
-}
+file.exists(out)
 }
