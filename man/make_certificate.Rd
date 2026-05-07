@@ -20,7 +20,8 @@ make_certificate(
   theme = cert_theme_classic(),
   width = 11,
   height = 8.5,
-  show_laurels = TRUE
+  show_laurels = TRUE,
+  device = c("cairo_pdf", "pdf")
 )
 }
 \arguments{
@@ -67,6 +68,15 @@ letter landscape (11 x 8.5).}
 
 \item{show_laurels}{Logical; if \code{TRUE} (the default), draw decorative
 laurel sprays flanking the recipient name.}
+
+\item{device}{Either \code{"cairo_pdf"} (the default) or \code{"pdf"}. Cairo
+renders Unicode glyphs (en-dashes, em-dashes, smart quotes) cleanly
+and is the recommended choice. The base \code{"pdf"} device is more
+portable — it has no system dependency on Cairo / XQuartz — but
+silently downgrades non-ASCII characters to hyphens. Use \code{"pdf"}
+if you see "failed to load cairo DLL" warnings or segfaults on
+systems without Cairo (some macOS installations without XQuartz,
+stripped Linux containers, etc.).}
 }
 \value{
 The output \code{path}, returned invisibly.
@@ -100,7 +110,8 @@ make_certificate(
   academic_year = "2025-2026",
   signers       = list(
     list(name = "Alex Chair, Ph.D.", title = "Department Chair")
-  )
+  ),
+  device        = "pdf"   # use "cairo_pdf" (default) for proper Unicode
 )
 file.exists(out)
 }

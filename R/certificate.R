@@ -43,6 +43,14 @@
 #'   letter landscape (11 x 8.5).
 #' @param show_laurels Logical; if `TRUE` (the default), draw decorative
 #'   laurel sprays flanking the recipient name.
+#' @param device Either `"cairo_pdf"` (the default) or `"pdf"`. Cairo
+#'   renders Unicode glyphs (en-dashes, em-dashes, smart quotes) cleanly
+#'   and is the recommended choice. The base `"pdf"` device is more
+#'   portable — it has no system dependency on Cairo / XQuartz — but
+#'   silently downgrades non-ASCII characters to hyphens. Use `"pdf"`
+#'   if you see "failed to load cairo DLL" warnings or segfaults on
+#'   systems without Cairo (some macOS installations without XQuartz,
+#'   stripped Linux containers, etc.).
 #'
 #' @return The output `path`, returned invisibly.
 #' @export
@@ -59,7 +67,8 @@
 #'   academic_year = "2025-2026",
 #'   signers       = list(
 #'     list(name = "Alex Chair, Ph.D.", title = "Department Chair")
-#'   )
+#'   ),
+#'   device        = "pdf"   # use "cairo_pdf" (default) for proper Unicode
 #' )
 #' file.exists(out)
 make_certificate <- function(path,
@@ -77,7 +86,8 @@ make_certificate <- function(path,
                              theme          = cert_theme_classic(),
                              width          = 11,
                              height         = 8.5,
-                             show_laurels   = TRUE) {
+                             show_laurels   = TRUE,
+                             device         = c("cairo_pdf", "pdf")) {
 
   if (missing(path) || !nzchar(path)) {
     stop("`path` is required.", call. = FALSE)
@@ -92,22 +102,16 @@ make_certificate <- function(path,
   if (length(signers) < 1L || length(signers) > 2L) {
     stop("`signers` must be a list of 1 or 2 signers.", call. = FALSE)
   }
-  if (!isTRUE(capabilities("cairo"))) {
-    stop(
-      "make_certificate() needs an R build with Cairo support to render ",
-      "Unicode glyphs (en-dashes, smart quotes, etc.) via cairo_pdf(). ",
-      "Your R reports capabilities('cairo') == FALSE. On Linux this ",
-      "usually means installing the Cairo system libraries and ",
-      "reinstalling R; on macOS and Windows the standard CRAN binaries ",
-      "include Cairo by default.",
-      call. = FALSE
-    )
-  }
+  device <- match.arg(device)
 
   PAGE_W <- width
   PAGE_H <- height
 
-  grDevices::cairo_pdf(path, width = PAGE_W, height = PAGE_H)
+  switch(
+    device,
+    cairo_pdf = grDevices::cairo_pdf(path, width = PAGE_W, height = PAGE_H),
+    pdf       = grDevices::pdf(path, width = PAGE_W, height = PAGE_H)
+  )
   on.exit(grDevices::dev.off(), add = TRUE)
 
   grid::grid.newpage()
