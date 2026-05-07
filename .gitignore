@@ -1,0 +1,16 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto
+*.Rproj
+
+# Generated artifacts
+inst/doc
+docs/
+
+# Local outputs
+/outputs/
+*.pdf
+!inst/examples/*.pdf
