@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 `certify` produces formal landscape PDF certificates with configurable
 color themes, optional logos, decorative borders, laurels, and corner
-ornaments. The package is built on `grid` only — no LaTeX or Quarto
+ornaments. The package is built on `grid` only, and no LaTeX or Quarto
 installation is required.
 
 ![](man/figures/README-preview.png)
