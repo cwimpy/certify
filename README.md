@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/certify)](https://CRAN.R-project.org/package=certify)
 [![R-CMD-check](https://github.com/cwimpy/certify/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cwimpy/certify/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -18,6 +20,14 @@ installation is required.
 ![](man/figures/README-preview.png)
 
 ## Installation
+
+Install the released version from CRAN:
+
+``` r
+install.packages("certify")
+```
+
+Or install the development version from GitHub:
 
 ``` r
 # install.packages("remotes")
