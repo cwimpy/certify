@@ -36,11 +36,15 @@ Install the released version from CRAN:
 install.packages("certify")
 ```
 
-Or install the development version from GitHub:
+Or install the development version from GitHub. `build_vignettes = TRUE`
+is worth including: without it the vignette is not built, and
+`vignette("certify")` finds nothing.
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("cwimpy/certify")
+remotes::install_github("cwimpy/certify", build_vignettes = TRUE)
+
+vignette("certify")   # the walkthrough
 ```
 
 ## Usage
@@ -122,7 +126,7 @@ page. `width` and `height` override it for anything else.
 make_certificate(path = "award.pdf", recipient = "Jane A. Doe", paper = "a4")
 ```
 
-## Two signers, custom logo, custom page size
+## Two signers and a custom logo
 
 A logo must be a PNG. It replaces `organization` in the header and is
 scaled to fit inside a box `logo_height` by `logo_width` inches (2 by
@@ -140,8 +144,7 @@ make_certificate(
     list(name = "Secretary Name", title = "Secretary")
   ),
   logo      = "path/to/your_logo.png",
-  width     = 11.69,    # A4 landscape
-  height    = 8.27,
+  paper     = "a4",
   theme     = cert_theme_warm()
 )
 ```
