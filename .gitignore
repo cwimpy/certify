@@ -6,6 +6,9 @@
 .quarto
 *.Rproj
 
+# Claude Code local files (session logs, machine-local settings)
+.claude/
+
 # Generated artifacts
 inst/doc
 docs/
