@@ -14,10 +14,19 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 `certify` produces formal landscape PDF certificates with configurable
 color themes, optional logos, decorative borders, laurels, and corner
-ornaments. The package is built on `grid` only, and no LaTeX or Quarto
+ornaments. The package is built on `grid` only — no LaTeX or Quarto
 installation is required.
 
 ![](man/figures/README-preview.png)
+
+## Getting started
+
+A step-by-step walkthrough, written for occasional R users, is included
+as a vignette:
+
+``` r
+vignette("certify")
+```
 
 ## Installation
 
@@ -82,7 +91,43 @@ make_certificate(
 )
 ```
 
+## A whole roster at once
+
+`make_certificates()` takes a data frame and writes one PDF per row.
+
+``` r
+roster <- read.csv("roster.csv")   # a `recipient` column is all you need
+
+make_certificates(
+  roster,
+  dir          = "certificates",
+  organization = "University of Somewhere",
+  signers      = list(
+    list(name = "Alex Chair, Ph.D.", title = "Department Chair")
+  )
+)
+```
+
+Columns named after `make_certificate()` arguments (`award_name`,
+`citation`, and so on) vary per certificate; everything else stays
+constant.
+
+## Paper size
+
+`paper` accepts `"letter"` (the default, 11 x 8.5 landscape), `"legal"`,
+`"tabloid"`, `"a3"`, `"a4"`, and `"a5"`. The design scales with the
+page. `width` and `height` override it for anything else.
+
+``` r
+make_certificate(path = "award.pdf", recipient = "Jane A. Doe", paper = "a4")
+```
+
 ## Two signers, custom logo, custom page size
+
+A logo must be a PNG. It replaces `organization` in the header and is
+scaled to fit inside a box `logo_height` by `logo_width` inches (2 by
+4.5 by default), keeping its proportions: square logos are limited by
+height, wide wordmarks by width.
 
 ``` r
 make_certificate(

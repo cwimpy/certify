@@ -17,9 +17,12 @@ make_certificate(
   date_str = format(Sys.Date(), "\%B \%Y"),
   signers = list(list(name = "", title = "")),
   logo = NULL,
+  logo_height = 2,
+  logo_width = 4.5,
   theme = cert_theme_classic(),
-  width = 11,
-  height = 8.5,
+  paper = "letter",
+  width = NULL,
+  height = NULL,
   show_laurels = TRUE,
   device = c("cairo_pdf", "pdf")
 )
@@ -60,21 +63,37 @@ appears centered below the signature row.}
 \item{logo}{Optional path to a PNG logo. When provided, the image is
 centered in the header and \code{organization} is ignored.}
 
+\item{logo_height, logo_width}{Maximum logo size in inches. The image is
+scaled to fit inside this box without distorting its proportions, so
+whichever limit it reaches first wins: a tall or squarish logo is
+limited by \code{logo_height} (2 inches by default), while a wide wordmark
+is limited by \code{logo_width} (4.5 inches by default) and renders shorter
+than \code{logo_height}. Raise \code{logo_width} to let a wide logo run closer to
+the border, or lower both to make any logo smaller.}
+
 \item{theme}{A \code{cert_theme} object controlling colors. See
 \code{\link[=cert_theme]{cert_theme()}} and the preset variants.}
 
-\item{width, height}{Page dimensions in inches. Defaults give US
-letter landscape (11 x 8.5).}
+\item{paper}{Named paper size, matched case-insensitively: \code{"letter"}
+(the default), \code{"legal"}, \code{"tabloid"}, \code{"a3"}, \code{"a4"}, or \code{"a5"}. All
+are landscape. The design is drawn for an 11 x 8.5 page and scaled
+proportionally to whatever size is chosen, so type and ornament sizes
+grow with the paper rather than staying letter-sized on a large sheet.}
+
+\item{width, height}{Page dimensions in inches, overriding \code{paper} when
+supplied. Leave as \code{NULL} to use the named size.}
 
 \item{show_laurels}{Logical; if \code{TRUE} (the default), draw decorative
 laurel sprays flanking the recipient name.}
 
-\item{device}{Either \code{"cairo_pdf"} (the default) or \code{"pdf"}. Cairo
+\item{device}{Either \code{"cairo_pdf"} or \code{"pdf"}. If left unset, cairo is
+used when it is actually usable and the base \code{pdf} device is used
+otherwise, so no argument is needed on machines missing Cairo. Cairo
 renders Unicode glyphs (en-dashes, em-dashes, smart quotes) cleanly
 and is the recommended choice. The base \code{"pdf"} device is more
 portable — it has no system dependency on Cairo / XQuartz — but
-silently downgrades non-ASCII characters to hyphens. Use \code{"pdf"}
-if you see "failed to load cairo DLL" warnings or segfaults on
+silently downgrades non-ASCII characters to hyphens.
+Passing \code{"cairo_pdf"} explicitly skips the fallback and will fail on
 systems without Cairo (some macOS installations without XQuartz,
 stripped Linux containers, etc.).}
 }
@@ -89,8 +108,9 @@ or two signature blocks. The output is drawn entirely with the
 }
 \section{Layout}{
 
-The page is US-letter landscape by default (11 x 8.5 inches). Pass
-\code{width} and \code{height} to render any other size. The header region
+The page is US-letter landscape by default (11 x 8.5 inches), which
+prints as-is on standard paper at 100\% scale. Pass \code{paper} for another
+named size, or \code{width} and \code{height} for an arbitrary one. The header region
 shows either an image (if \code{logo} is supplied) or a wordmark
 constructed from \code{organization}. Below the header, the certificate
 shows a divider, the title, an optional award subtitle and program
@@ -111,7 +131,7 @@ make_certificate(
   signers       = list(
     list(name = "Alex Chair, Ph.D.", title = "Department Chair")
   ),
-  device        = "pdf"   # use "cairo_pdf" (default) for proper Unicode
+  device        = "pdf"   # omit this to pick the best device available
 )
 file.exists(out)
 }
